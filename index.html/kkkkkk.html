@@ -1,0 +1,228 @@
+<!-- Main Page (index.html) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Succinct Stage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700&family=Special+Elite&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Times New Roman', serif;
+      background-color: black;
+      position: relative;
+      color: white;
+    }
+
+    .lines {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .line {
+      position: absolute;
+      background-color: hotpink;
+      box-shadow: 0 0 8px hotpink;
+    }
+
+    .vertical {
+      width: 2px;
+      height: 100%;
+      animation: flicker 4s infinite;
+    }
+
+    .horizontal {
+      height: 2px;
+      width: 100%;
+      animation: flicker 5s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .header {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: white;
+      padding: 10px 20px;
+      color: hotpink;
+      font-weight: bold;
+      z-index: 2;
+      text-decoration: none;
+      font-family: 'Special Elite', monospace;
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 1;
+    }
+
+    .welcome {
+      background: hotpink;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      padding: 20px 40px;
+      cursor: pointer;
+    }
+
+    .worthy {
+      font-family: 'Special Elite', monospace;
+      color: white;
+      font-size: 16px;
+      margin-top: 20px;
+      animation: glitch 2s infinite;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); opacity: 1; }
+      20% { transform: translate(-2px, 2px); opacity: 0.8; }
+      40% { transform: translate(2px, -2px); opacity: 0.6; }
+      60% { transform: translate(-1px, 1px); opacity: 0.9; }
+      80% { transform: translate(1px, -1px); opacity: 1; }
+      100% { transform: translate(0); opacity: 1; }
+    }
+
+    #loadingScreen {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      color: hotpink;
+      font-family: 'Archivo', sans-serif;
+      z-index: 10;
+    }
+
+    .loading-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 48px;
+      font-weight: bold;
+      z-index: 11;
+      background-color: white;
+      padding: 10px 20px;
+    }
+
+    #loadingLines {
+      z-index: 10;
+      mask-image: radial-gradient(circle, transparent 0%, transparent 40%, black 60%);
+      -webkit-mask-image: radial-gradient(circle, transparent 0%, transparent 40%, black 60%);
+    }
+
+    .loading-home-tab {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: black;
+      color: white;
+      font-family: 'Special Elite', monospace;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-size: 16px;
+      border: 2px solid white;
+      z-index: 11;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .loading-home-tab:hover {
+      background-color: white;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Audio element -->
+  <audio id="bg-music" autoplay loop muted>
+    <source src="dramaticmusic.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Background lines -->
+  <div class="lines" id="backgroundLines"></div>
+
+  <!-- Navigation -->
+  <a href="chill.html" class="header">Succinct Summer Lounge</a>
+
+  <!-- Welcome container -->
+  <div class="container">
+    <div class="welcome" onclick="startExperience()">Welcome To Succinct Stage 2.5</div>
+    <div class="worthy">Click to See if you are worthy</div>
+  </div>
+
+  <!-- Loading Screen -->
+  <div id="loadingScreen">
+    <a href="index.html" class="loading-home-tab">Home</a>
+    <div class="lines" id="loadingLines"></div>
+    <div class="loading-text">Oops Stage 2.5 still loading.</div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    function createLines(containerId) {
+      const container = document.getElementById(containerId);
+      for (let i = 0; i < 20; i++) {
+        const vertical = document.createElement('div');
+        vertical.className = 'line vertical';
+        vertical.style.left = `${(i * 100) / 20}%`;
+        container.appendChild(vertical);
+
+        const horizontal = document.createElement('div');
+        horizontal.className = 'line horizontal';
+        horizontal.style.top = `${(i * 100) / 20}%`;
+        container.appendChild(horizontal);
+      }
+    }
+
+    function startExperience() {
+      const music = document.getElementById('bg-music');
+      if (music) {
+        music.muted = false;
+        music.volume = 0.4;
+        music.play().catch((e) => {
+          console.log('Playback blocked:', e);
+        });
+      }
+      showLoadingScreen();
+    }
+
+    function showLoadingScreen() {
+      document.body.style.overflow = 'hidden';
+      document.getElementById('loadingScreen').style.display = 'block';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      createLines('backgroundLines');
+      createLines('loadingLines');
+    });
+  </script>
+</body>
+</html>
